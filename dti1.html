@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Queue App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #e5e5e5;
+        }
+
+        .phone {
+            width: 360px;
+            height: 640px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .header {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .screen {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .active {
+            display: block;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 80%;
+            padding: 12px;
+            margin: 10px;
+            border: none;
+            border-radius: 20px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .card {
+            background: #f8f8f8;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 15px;
+        }
+
+        .token {
+            font-size: 24px;
+            color: green;
+            margin: 15px 0;
+        }
+
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: #ddd;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .bottom-nav button {
+            width: auto;
+            background: none;
+            color: black;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="phone">
+
+    <div class="header">🚍 Smart Queue</div>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login" class="screen active">
+        <h3>Login</h3>
+        <input type="text" id="username" placeholder="Enter Name">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- HOME -->
+    <div id="home" class="screen">
+        <h3>Welcome</h3>
+        <p>Select your bus</p>
+        <button onclick="showScreen('bus')">View Buses</button>
+    </div>
+
+    <!-- BUS LIST -->
+    <div id="bus" class="screen">
+        <h3>Available Buses</h3>
+
+        <div class="card">
+            <p><b>Bus 101</b></p>
+            <p>Arriving in 5 mins</p>
+            <button onclick="joinQueue()">Join Queue</button>
+        </div>
+
+        <div class="card">
+            <p><b>Bus 202</b></p>
+            <p>Arriving in 8 mins</p>
+            <button onclick="joinQueue()">Join Queue</button>
+        </div>
+    </div>
+
+    <!-- QUEUE -->
+    <div id="queue" class="screen">
+        <h3>Your Queue</h3>
+        <div class="token" id="token"></div>
+        <p>Estimated Wait: 5 mins</p>
+        <button onclick="showScreen('boarding')">Next</button>
+    </div>
+
+    <!-- BOARDING -->
+<div id="boarding" class="screen">
+    <h3>Bus Arrived 🚍</h3>
+    <p>Please board in order</p>
+
+    <h4>Scan to Pay 💳</h4>
+
+    <!-- QR CODE -->
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=BusPayment123"
+         alt="QR Code">
+
+    <p>Fare: ₹25</p>
+
+    <button onclick="showScreen('done')">Paid & Boarded</button>
+</div>
+
+    <!-- DONE -->
+    <div id="done" class="screen">
+        <h3>✅ Completed</h3>
+        <p>Have a safe journey!</p>
+        <button onclick="showScreen('home')">Home</button>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <button onclick="showScreen('home')">Home</button>
+        <button onclick="showScreen('bus')">Buses</button>
+        <button onclick="showScreen('queue')">Queue</button>
+    </div>
+
+</div>
+
+<script>
+function showScreen(id) {
+    let screens = document.querySelectorAll('.screen');
+    screens.forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+// LOGIN FUNCTION
+function login() {
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    if(user && pass) {
+        alert("Login Successful!");
+        showScreen('home');
+    } else {
+        alert("Please enter details");
+    }
+}
+
+// JOIN QUEUE
+function joinQueue() {
+    let tokenNumber = Math.floor(Math.random() * 100);
+    document.getElementById("token").innerText = "Token: A" + tokenNumber;
+    showScreen('queue');
+}
+</script>
+
+</body>
+</html>
